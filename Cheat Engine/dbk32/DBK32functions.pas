@@ -3191,19 +3191,19 @@ begin
         if not fileexists(dataloc) then
         begin
 
-          servicename:='rot4tion';
+          servicename:='rot4tiondriver';
           ultimapservicename:='ULTIMAP2';
           processeventname:='DBKProcList60';
           threadeventname:='DBKThreadList60';
 
           if iswow64 then
           begin
-            sysfile:='rot4tion64.sys';
+            sysfile:='rot4tiondriver64.sys';
             ultimapsysfile:='ultimap2-64.sys';
           end
           else
           begin
-            sysfile:='rot4tion32.sys';
+            sysfile:='rot4tiondriver32.sys';
             ultimapsysfile:='';
           end;
 

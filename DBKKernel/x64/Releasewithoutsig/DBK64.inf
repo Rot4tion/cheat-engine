@@ -1,0 +1,79 @@
+;
+; rot4tiondriver64.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider=%ManufacturerName%
+CatalogFile=rot4tiondriver64.cat
+DriverVer = 08/02/2024,22.49.38.485
+
+[DestinationDirs]
+DefaultDestDir = 12
+rot4tiondriver64_Device_CoInstaller_CopyFiles = 11
+
+; ================= Class section =====================
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+rot4tiondriver64.sys  = 1,,
+WdfCoInstaller01009.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%rot4tiondriver64.DeviceDesc%=rot4tiondriver64_Device, Root\rot4tiondriver64 ; TODO: edit hw-id
+
+[rot4tiondriver64_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+rot4tiondriver64.sys
+
+;-------------- Service installation
+[rot4tiondriver64_Device.NT.Services]
+AddService = rot4tiondriver64,%SPSVCINST_ASSOCSERVICE%, rot4tiondriver64_Service_Inst
+
+; -------------- rot4tiondriver64 driver install sections
+[rot4tiondriver64_Service_Inst]
+DisplayName    = %rot4tiondriver64.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\rot4tiondriver64.sys
+
+;
+;--- rot4tiondriver64_Device Coinstaller installation ------
+;
+
+[rot4tiondriver64_Device.NT.CoInstallers]
+AddReg=rot4tiondriver64_Device_CoInstaller_AddReg
+CopyFiles=rot4tiondriver64_Device_CoInstaller_CopyFiles
+
+[rot4tiondriver64_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller01009.dll,WdfCoInstaller"
+
+[rot4tiondriver64_Device_CoInstaller_CopyFiles]
+WdfCoInstaller01009.dll
+
+[rot4tiondriver64_Device.NT.Wdf]
+KmdfService =  rot4tiondriver64, rot4tiondriver64_wdfsect
+[rot4tiondriver64_wdfsect]
+KmdfLibraryVersion = 1.9
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="Rot4tion" ;TODO: Replace with your manufacturer name
+ClassName="System" ; TODO: edit ClassName
+DiskName = "rot4tiondriver64 Installation Disk"
+rot4tiondriver64.DeviceDesc = "rot4tiondriver64 Device"
+rot4tiondriver64.SVCDESC = "rot4tiondriver64 Service"
